@@ -37,6 +37,8 @@ For ```Order``` validation method ```is_ik_payment_valid?``` should be overriden
      ( self.currency == ik_cur and self.total == ik_am )
     end
 
+```Order``` should have method ```paid``` which is called by Interkassa ```interaction``` callback.
+
 If ```Order``` is using ```@currency``` and ```@total``` fields don't override.
 
 ## Checkout Form

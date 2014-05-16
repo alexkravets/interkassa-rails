@@ -5,8 +5,8 @@ module InterkassaPayment
     # relations
     has_one :ik_payment, class_name: "Interkassa::Payment"
 
-    def is_ik_payment_valid? (ik_cur, ik_am)
-     ( @currency == ik_cur and @total == ik_am )
+    def is_ik_payment_valid?(ik_cur, ik_am)
+     ( self.currency == ik_cur and self.total == ik_am )
     end
   end
 end

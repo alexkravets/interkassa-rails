@@ -33,8 +33,8 @@ In ```Order``` class (or other class) add ```include InterkassaPayment```. This 
 
 For ```Order``` validation method ```is_ik_payment_valid?``` should be overriden. This is the default one:
 
-    def is_ik_payment_valid? (ik_cur, ik_am)
-     ( @currency == ik_cur and @total == ik_am )
+    def is_ik_payment_valid?(ik_cur, ik_am)
+     ( self.currency == ik_cur and self.total == ik_am )
     end
 
 If ```Order``` is using ```@currency``` and ```@total``` fields don't override.
@@ -52,6 +52,14 @@ Here is an example of basic checkout form, before using it make sure ```Order```
     </form>
 
 More more details check out [documentation](https://new.interkassa.com/files/docs/IK2.SCI.Protocol.v0.9.8.ru.pdf).
+
+## Templates
+
+Response templates for **fail** and **success** are placed at ```views/interkassa/callbacks```.
+
+## Author
+
+Alex Kravets @ [slatestudio.com](http://www.slatestudio.com)
 
 ## Licence
 

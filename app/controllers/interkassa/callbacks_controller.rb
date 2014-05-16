@@ -1,15 +1,14 @@
-class Interkassa::CallbacksController < ActionController::Base
+class Interkassa::CallbacksController < ApplicationController
   # disabled CSRF check all requests are sent by Interkassa
   skip_before_filter :verify_authenticity_token
 
   # check if specified order exists and
   # update attributes for payment
   def fail
-    order_id = params['ik_pm_no']
-    payment  = Interkassa::Payment.find_or_initialize_by(order_id: order_id)
+    payment  = Interkassa::Payment.find_or_initialize_by(order_id: params['ik_pm_no'])
     @order   = payment.order
     if @order
-      payment.update_attributes(params)
+      payment.update_attributes(permit_params)
     else
       logger.debug "Interkassa error: order not found"
       render text: 'Order not found', status: 500
@@ -40,14 +39,14 @@ class Interkassa::CallbacksController < ActionController::Base
         render text: 'Order not found', status: 500
       else
 
-        ik_cur = params['ik_pm_no']
+        ik_cur = params['ik_cur']
         ik_am  = params['ik_am'].to_f
 
-        if @order.is_ik_payment_valid? (ik_cur, ik_am)
-          payment = Interkassa::Payment.find_or_initialize_by(order_id: order_id)
-          payment.update_attributes(params)
+        if @order.is_ik_payment_valid?(ik_cur, ik_am)
+          payment = Interkassa::Payment.find_or_initialize_by(order_id: params['ik_pm_no'])
+          payment.update_attributes(permit_params)
 
-          head :ok
+          render text: :ok, status: 200
         else
           logger.debug "Interkassa error: invalid payment attributes"
           render text: 'Invalid payment attributes', status: 500
@@ -75,5 +74,22 @@ class Interkassa::CallbacksController < ActionController::Base
 
   def is_ik_id_valid?
     params['ik_co_id'] == ENV['IK_CO_ID']
+  end
+
+  def permit_params
+    params.permit(:ik_co_id,
+                  :ik_inv_id,
+                  :ik_inv_st,
+                  :ik_inv_crt,
+                  :ik_inv_prc,
+                  :ik_pm_no,
+                  :ik_pw_via,
+                  :ik_am,
+                  :ik_cur,
+                  :ik_co_rfn,
+                  :ik_ps_price,
+                  :ik_desc,
+                  :action,
+                  :controller)
   end
 end

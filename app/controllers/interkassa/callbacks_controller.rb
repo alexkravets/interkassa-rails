@@ -46,7 +46,7 @@ class Interkassa::CallbacksController < ApplicationController
           payment = Interkassa::Payment.find_or_initialize_by(order_id: params['ik_pm_no'])
           payment.update_attributes(permit_params)
 
-          payment.order.paid()
+          payment.order.paid!
 
           render text: :ok, status: 200
         else

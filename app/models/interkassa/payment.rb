@@ -12,7 +12,7 @@ class Interkassa::Payment
   field :ik_pw_via
   field :ik_am,       type: Float
   field :ik_cur
-  field :ik_co_rfn
+  field :ik_co_rfn,   type: Float
   field :ik_ps_price, type: Float
   field :ik_desc
   field :action
